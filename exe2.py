@@ -31,8 +31,15 @@ def get_all_subgraph(graph: nx.MultiDiGraph, subgraphs: list = []):
     return subgraphs
 
 
-if __name__ == '__main__':
+def EX1():
     for n in range(2, 5):
         g = get_multigrain_with_connected_n_nodes(n)
         subgraphs = get_all_subgraph(g, [g])
         write_subgraphs_to_file(subgraphs, n)
+
+def EX2():
+    pass
+
+if __name__ == '__main__':
+    EX1()
+    EX2()

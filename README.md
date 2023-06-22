@@ -16,7 +16,13 @@ b) The output can be found in the GIT repository.
 c) Our program takes more than an hour to complete for values of n greater than 4. 
 
 d) After running the code for more than 5 hours with a value of n = 5, we decided to stop the execution due to the significant increase in computation time compared to n = 4.
-The is_isomorphic function utilized in the code has a worst-case time complexity of O((n+m) * n! * n^2),
+
+According to the documents of nx.is_isomorphic the vf2-algorithm is implemented and even the original scientific reference is given.
+The boost library states for the vf2-algorithm the following complexity:
+
+"The spatial complexity of VF2 is of order O(V), where V is the (maximum) number of vertices of the two graphs. Time complexity is O(V^2) in the best case and O(V!·V) in the worst case."
+
+The whole EX1 code inclouding the is_isomorphic has a worst-case time complexity of O((n+m) * n! * n^2),
 where n is the number of nodes and m is the number of edges in the graphs being compared.
 The exponential growth in time complexity with respect to n, particularly the factorial term n!, 
 indicates that the computation time increases rapidly as the size of the graphs grows. 

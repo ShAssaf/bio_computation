@@ -22,6 +22,21 @@ def write_subgraphs_to_file(subgraphs, n):
                 file.write(f"{edge[0]} {edge[1]}\n")
 
 
+# def write_subgraphs_to_file2(subgraphs):
+#     with open(f"subgraphs2_{len(subgraphs)}.txt", "w") as file:
+#         file.write(f"count={len(subgraphs)}\n")
+#         for sub, count in subgraphs.items():
+#             file.write(f"#{count}\n")
+#             for edge in sub.edges:
+#                 file.write(f"{edge[0]} {edge[1]}\n")
+def write_subgraphs_to_file_two(subgraphs):
+    with open(f"subgraphs2_{len(subgraphs)}.txt", "w") as file:
+        file.write(f"count={len(subgraphs)}\n")
+        for sub, count in subgraphs.items():
+            file.write(f"#{count}\n")
+            for edge in sub.edges:
+                file.write(f"{edge[0]} {edge[1]}\n")
+
 def get_all_unique_subgraph(graph: nx.MultiDiGraph, subgraphs: list = []):
     for e in graph.edges:
         new_graph = graph.copy()
@@ -36,16 +51,18 @@ def get_all_subgraph_count_dict(graph: nx.MultiDiGraph, subgraphs: dict = {}):
     for e in graph.edges:
         new_graph = graph.copy()
         new_graph.remove_edge(e[0], e[1])
-        if nx.is_weakly_connected(new_graph):
-            iso = [nx.is_isomorphic(new_graph, g2) for g2 in subgraphs.keys()]
+        for gg in [new_graph.subgraph(component) for component in nx.weakly_connected_components(new_graph)]:
+            if len(gg.edges) == 0:
+                continue
+            iso = [nx.is_isomorphic(gg, g2) for g2 in subgraphs.keys()]
             if iso.count(True) > 1:
                 print(f"iso_sum={iso}")
             if not iso.count(True):
-                subgraphs[new_graph] = 1
+                subgraphs[gg] = 1
             else:
                 subgraphs[list(subgraphs.keys())[iso.index(True)]] = subgraphs[list(subgraphs.keys())[
                     iso.index(True)]] + iso.count(True)
-            get_all_subgraph_count_dict(new_graph, subgraphs)
+            get_all_subgraph_count_dict(gg, subgraphs)
     return subgraphs
 
 
@@ -66,31 +83,20 @@ def create_graph_from_file(file_path='./graph_example.txt'):
 
 
 def EX2():
-    g = get_multidigraph_with_connected_n_nodes(4)
-    full_graph = get_multidigraph_with_connected_n_nodes(g.nodes.__len__())
-
+    g = create_graph_from_file()
     subs = get_all_subgraph_count_dict(g, {g: 1})
-    all_subs = get_all_unique_subgraph(full_graph, [full_graph])
-    #
-    #
-    # res_dict = {}
-    # while subs:
-    #     sub_graph = subs.pop()
-    #     iso_sub = [nx.is_isomorphic(sub_graph, g2) for g2 in subs]
-    #     res_dict[sub_graph] = iso_sub.count(True)
-    #     if True in iso_sub:
-    #         indexes_to_remove = [index for index, item in enumerate(iso_sub) if item == True]
-    #         subs = [elem for index, elem in enumerate(subs) if index not in indexes_to_remove]
-
+    all_subs = []
+    for i in range(2, len(g.nodes) + 1):
+        full_graph = get_multidigraph_with_connected_n_nodes(i)
+        all_subs += get_all_unique_subgraph(full_graph, [full_graph])
     total_res_dict = {}
     for sub in all_subs:
-        for s in subs.keys():
-            if nx.is_isomorphic(sub, s):
-                total_res_dict[sub] = subs[s]
-                subs.pop(s)
-                break
-        total_res_dict[sub] = 0
-
+        for sub_b in subs:
+            if nx.is_isomorphic(sub, sub_b):
+                total_res_dict[sub] = subs[sub_b]
+        if sub not in total_res_dict:
+            total_res_dict[sub] = 0
+    write_subgraphs_to_file_two(total_res_dict)
     pass
 
 

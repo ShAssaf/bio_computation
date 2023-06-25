@@ -110,5 +110,5 @@ def write_subgraphs_to_file2(subgraphs_dict, n):
 
 
 if __name__ == '__main__':
-    # EX1()
+    EX1()
     EX2()

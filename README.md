@@ -36,6 +36,6 @@ greatly influence the execution time of the is_isomorphic function. Therefore, f
 it may not be feasible to run this code within a reasonable amount of time due to the exponential increase in computation.
 
 ### Exercise 2
-Coming soon...
+is called from the main as we explained, its input is graph (come from a file and the output are the motifs that can be generated from the graph
 
 Please refer to the code and comments within the source files for a detailed understanding of the implementation and algorithmic approach.
